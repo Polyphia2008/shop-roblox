@@ -73,6 +73,18 @@ return [
             'replace_placeholders' => true,
         ],
 
+        /*
+         * Kênh riêng cho sự kiện bảo mật (SQL Injection, brute-force...).
+         * Tách riêng khỏi laravel.log để dễ theo dõi và giữ lâu hơn (90 ngày).
+         */
+        'security' => [
+            'driver' => 'daily',
+            'path' => storage_path('logs/security.log'),
+            'level' => 'debug',
+            'max_files' => env('SECURITY_LOG_DAYS', 90),
+            'replace_placeholders' => true,
+        ],
+
         'monthly' => [
             'driver' => 'monthly',
             'path' => storage_path('logs/laravel.log'),

@@ -1,5 +1,9 @@
 <?php
 
+use App\Http\Middleware\DetectSqlInjection;
+use App\Http\Middleware\EnsureUserIsAdmin;
+use App\Http\Middleware\EnsureUserIsNotBanned;
+use App\Http\Middleware\SecurityHeaders;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -12,7 +16,22 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        /*
+         * Middleware toàn cục.
+         * - SecurityHeaders: gắn header bảo mật cho MỌI phản hồi.
+         * - DetectSqlInjection: quét input, ghi log & chặn payload tấn công.
+         *   (Lớp phòng thủ thứ hai — prepared statement vẫn là lớp chính.)
+         */
+        $middleware->append(SecurityHeaders::class);
+        $middleware->append(DetectSqlInjection::class);
+
+        /* Tin cậy header proxy của Cloudflare để lấy đúng IP + scheme HTTPS */
+        $middleware->trustProxies(at: '*');
+
+        $middleware->alias([
+            'admin'      => EnsureUserIsAdmin::class,
+            'not.banned' => EnsureUserIsNotBanned::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(

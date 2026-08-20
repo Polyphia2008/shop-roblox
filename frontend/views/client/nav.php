@@ -133,7 +133,7 @@
                                     alt="" class="h-6 mx-auto">
                             </span>
                         <span class="group-data-[topbar=dark]:hidden group-data-[topbar=brand]:hidden">
-                                <img src="https://sellrobux.com/assets/logo_new/logo11.webp" alt="" class="h-6 mx-auto">
+                                <img src="<?= BASE_URL('public') ?>/assets/img/logo-nav.webp" alt="" class="h-6 mx-auto">
                             </span>
                     </a>
                     <a href="https://sellrobux.com"
@@ -144,7 +144,7 @@
                                     alt="" class="h-6 mx-auto">
                             </span>
                         <span class="group-data-[topbar=dark]:block group-data-[topbar=brand]:block">
-                                <img src="https://sellrobux.com/assets/logo_new/logo11.webp" alt="" class="h-6 mx-auto">
+                                <img src="<?= BASE_URL('public') ?>/assets/img/logo-nav.webp" alt="" class="h-6 mx-auto">
                             </span>
                     </a>
                 </div>

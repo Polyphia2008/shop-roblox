@@ -202,7 +202,7 @@ $accounts1 = $VCD->get_list("SELECT * FROM `accountrb` WHERE  `status` = '1' LIM
     <div class="col-span-12  2xl:col-span-8 flex justify-between" style="flex-direction: column">
         <div>
             <div class="flex border-b-2">
-                <img width="100" src="https://static.vecteezy.com/system/resources/previews/027/127/470/non_2x/roblox-logo-roblox-icon-transparent-free-png.png">
+                <img width="100" src="<?= BASE_URL('public') ?>/assets/img/roblox-logo.png">
                 <div class="my-auto">
                     <h4>Roblox</h4>
                     <h6 class="text-green-500">Giao ngay</h6>
@@ -227,7 +227,7 @@ $accounts1 = $VCD->get_list("SELECT * FROM `accountrb` WHERE  `status` = '1' LIM
     </div>
     <div class="col-span-12  2xl:col-span-4 modal-detail-right p-2 flex justify-between" style="flex-direction: column">
         <div class="flex justify-center">
-            <img width="250" src="https://static.vecteezy.com/system/resources/previews/027/127/470/non_2x/roblox-logo-roblox-icon-transparent-free-png.png">
+            <img width="250" src="<?= BASE_URL('public') ?>/assets/img/roblox-logo.png">
         </div>
         <div class="text-center">
             <p><span class="font-bold" id="accNumber">#ID:</span> <?=$accountrb1['id'];?> </p>
@@ -407,7 +407,7 @@ $accounts = $VCD->get_list("SELECT * FROM `accountrb` WHERE  `rate` = '$RateCode
     <div class="col-span-12  2xl:col-span-8 flex justify-between" style="flex-direction: column">
         <div>
             <div class="flex border-b-2">
-                <img width="100" src="https://static.vecteezy.com/system/resources/previews/027/127/470/non_2x/roblox-logo-roblox-icon-transparent-free-png.png">
+                <img width="100" src="<?= BASE_URL('public') ?>/assets/img/roblox-logo.png">
                 <div class="my-auto">
                     <h4>Roblox</h4>
                     <h6 class="text-green-500">Giao ngay</h6>
@@ -432,7 +432,7 @@ $accounts = $VCD->get_list("SELECT * FROM `accountrb` WHERE  `rate` = '$RateCode
     </div>
     <div class="col-span-12  2xl:col-span-4 modal-detail-right p-2 flex justify-between" style="flex-direction: column">
         <div class="flex justify-center">
-            <img width="250" src="https://static.vecteezy.com/system/resources/previews/027/127/470/non_2x/roblox-logo-roblox-icon-transparent-free-png.png">
+            <img width="250" src="<?= BASE_URL('public') ?>/assets/img/roblox-logo.png">
         </div>
         <div class="text-center">
             <p><span class="font-bold" id="accNumber">#ID:</span> <?=$accountrb['id'];?> </p>
@@ -916,7 +916,7 @@ $accountorders1 =  $VCD->get_list("SELECT * FROM `accountorder` WHERE  `status` 
     <div class="col-span-12  2xl:col-span-8 flex justify-between" style="flex-direction: column">
         <div>
             <div class="flex border-b-2">
-                <img width="100" src="https://static.vecteezy.com/system/resources/previews/027/127/470/non_2x/roblox-logo-roblox-icon-transparent-free-png.png">
+                <img width="100" src="<?= BASE_URL('public') ?>/assets/img/roblox-logo.png">
                 <div class="my-auto">
                     <h4>Roblox</h4>
                     <h6 class="text-green-500">Order</h6>
@@ -942,7 +942,7 @@ $accountorders1 =  $VCD->get_list("SELECT * FROM `accountorder` WHERE  `status` 
     </div>
     <div class="col-span-12  2xl:col-span-4 modal-detail-right p-2 flex justify-between" style="flex-direction: column">
         <div class="flex justify-center">
-            <img width="250" src="https://static.vecteezy.com/system/resources/previews/027/127/470/non_2x/roblox-logo-roblox-icon-transparent-free-png.png">
+            <img width="250" src="<?= BASE_URL('public') ?>/assets/img/roblox-logo.png">
         </div>
         <div class="text-center">
             <p><span class="font-bold">#ID:</span> <?= $accountorder1['id']; ?></p>
@@ -1124,7 +1124,7 @@ $accountorders = $VCD->get_list("SELECT * FROM `accountorder` WHERE  `rate` = '$
     <div class="col-span-12  2xl:col-span-8 flex justify-between" style="flex-direction: column">
         <div>
             <div class="flex border-b-2">
-                <img width="100" src="https://static.vecteezy.com/system/resources/previews/027/127/470/non_2x/roblox-logo-roblox-icon-transparent-free-png.png">
+                <img width="100" src="<?= BASE_URL('public') ?>/assets/img/roblox-logo.png">
                 <div class="my-auto">
                     <h4>Roblox</h4>
                     <h6 class="text-green-500">Order</h6>
@@ -1150,7 +1150,7 @@ $accountorders = $VCD->get_list("SELECT * FROM `accountorder` WHERE  `rate` = '$
     </div>
     <div class="col-span-12  2xl:col-span-4 modal-detail-right p-2 flex justify-between" style="flex-direction: column">
         <div class="flex justify-center">
-            <img width="250" src="https://static.vecteezy.com/system/resources/previews/027/127/470/non_2x/roblox-logo-roblox-icon-transparent-free-png.png">
+            <img width="250" src="<?= BASE_URL('public') ?>/assets/img/roblox-logo.png">
         </div>
         <div class="text-center">
             <p><span class="font-bold">#ID:</span> <?= $accountorder['id']; ?></p>

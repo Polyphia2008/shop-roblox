@@ -7,13 +7,13 @@
                 <a href="https://sellrobux.com"
                    class="group-data-[sidebar=dark]:hidden group-data-[sidebar=brand]:hidden group-data-[sidebar=modern]:hidden">
                     <span class="group-data-[sidebar-size=sm]:hidden">
-                    <img src="https://sellrobux.com/assets/logo_new/2.png?v=2" alt="" class="h-7 mx-auto">
+                    <img src="<?= BASE_URL('public') ?>/assets/img/logo-footer.png" alt="" class="h-7 mx-auto">
                 </span>
                 </a>
                 <a href="https://sellrobux.com"
                    class="hidden group-data-[sidebar=dark]:block group-data-[sidebar=brand]:block group-data-[sidebar=modern]:block">
                     <span class="group-data-[sidebar-size=sm]:hidden">
-                    <img src="https://sellrobux.com/assets/logo_new/2.png?v=2" alt="" class="h-7 mx-auto">
+                    <img src="<?= BASE_URL('public') ?>/assets/img/logo-footer.png" alt="" class="h-7 mx-auto">
                 </span>
                 </a>
                 <button type="button" class="hidden p-0 float-end" id="vertical-hover">
@@ -482,10 +482,27 @@
 <script src="<?= BASE_URL('public') ?>/assets/vendor/js/swiper-bundle.min.js"></script>
 
 <!-- FIX: /livewire/livewire.min.js KHONG TON TAI (tan tich tu template Laravel/Livewire). The script nay gay loi 404 tren MOI trang. Da vo hieu hoa. -->
-<script>Alpine.store("editItem",{item:{},update(t){this.item=t}});Alpine.store("reportItem",{id:{},update(t){this.id=t,document.getElementById("report_id").value=t,document.getElementById("report_id").dispatchEvent(new Event("input"))}});Alpine.bind("exportExcel",()=>({type:"button","@click"(t){const e=t.target.getAttribute("data-id");e&&a(e)}}));Alpine.bind("buyItem",()=>({type:"button","@click"(t){const e=t.target.getAttribute("data-id");document.getElementById("itemBuyId").value=e,document.getElementById("itemBuyId").dispatchEvent(new Event("input")),document.getElementById("accNumber").innerText=e;const n=new CustomEvent("showModal",{detail:{modalId:"confirmBuy"}});
+<!-- ==================================================================
+     FIX LOI "Alpine is not defined" (nut Mua / modal chi tiet khong bam duoc)
+     ------------------------------------------------------------------
+     Source goc CHI nap Alpine trong deposit.php, nhung trang chu va
+     nhieu trang khac lai dung x-data / Alpine.store() / Alpine.bind()
+     => bien Alpine khong ton tai, toan bo nut "Mua", modal xac nhan
+     va export Excel deu KHONG HOAT DONG (console: Alpine is not defined).
+     Ngoai ra Alpine.store()/Alpine.bind() la API cua Alpine v3, con link
+     CDN goc lai tro ve Alpine v2.8.2 (khong co 2 ham nay).
+     ------------------------------------------------------------------
+     Cach sua dung chuan Alpine v3:
+       1) Dang ky store/bind BEN TRONG su kien 'alpine:init'
+       2) Nap alpine v3 kem thuoc tinh defer O SAU
+     ================================================================== -->
+<script>document.addEventListener("alpine:init",function(){Alpine.store("editItem",{item:{},update(t){this.item=t}});Alpine.store("reportItem",{id:{},update(t){this.id=t,document.getElementById("report_id").value=t,document.getElementById("report_id").dispatchEvent(new Event("input"))}});Alpine.bind("exportExcel",()=>({type:"button","@click"(t){const e=t.target.getAttribute("data-id");e&&a(e)}}));Alpine.bind("buyItem",()=>({type:"button","@click"(t){const e=t.target.getAttribute("data-id");document.getElementById("itemBuyId").value=e,document.getElementById("itemBuyId").dispatchEvent(new Event("input")),document.getElementById("accNumber").innerText=e;const n=new CustomEvent("showModal",{detail:{modalId:"confirmBuy"}});
 window.dispatchEvent(n)}}));Alpine.bind("detailItem",()=>({type:"button","@click"(t){t.target.getAttribute("data-id")}}));Alpine.bind("preBuyItem",()=>({type:"button","@click"(t){const e=t.target.getAttribute("data-id");document.getElementById("itemBuyPreId").value=e,document.getElementById("itemBuyPreId").dispatchEvent(new Event("input")),document.getElementById("accNumberPre").innerText=e;const n=new CustomEvent("showModal",{detail:{modalId:"confirmBuyOrder"}});window.dispatchEvent(n)}}));Alpine.bind("detailItemPre",()=>({type:"button","@click"(t){const e=t.target.getAttribute("data-id");
 document.getElementById("accNumberDetailPre").innerText=e,document.getElementById("roboxDetailPre").innerText=t.target.getAttribute("data-robox"),document.getElementById("rateDetailPre").innerText=t.target.getAttribute("data-rate"),
 document.getElementById("priceDetailPre").innerText=t.target.getAttribute("data-price"),document.getElementById("guaranteeDetailPre").innerText=t.target.getAttribute("data-guarantee"),
 document.getElementById("btnBuyModelPre").setAttribute("data-id",e)}}));
-function a(t){const e=document.getElementById(t),n=XLSX.utils.book_new(),d=XLSX.utils.aoa_to_sheet([["SELLROBUX.COM SHOP MUA BÁN ACC ROBUX GIÁ RẺ"]]),i=XLSX.utils.table_to_sheet(e);XLSX.utils.sheet_add_json(d,XLSX.utils.sheet_to_json(i),{origin:-1}),XLSX.utils.book_append_sheet(n,d,"Sheet1"),XLSX.writeFile(n,"SELLROBUX.COM SHOP MUA BÁN ACC ROBUX GIÁ RẺ.xlsx")}</script>
+function a(t){const e=document.getElementById(t),n=XLSX.utils.book_new(),d=XLSX.utils.aoa_to_sheet([["SELLROBUX.COM SHOP MUA BÁN ACC ROBUX GIÁ RẺ"]]),i=XLSX.utils.table_to_sheet(e);XLSX.utils.sheet_add_json(d,XLSX.utils.sheet_to_json(i),{origin:-1}),XLSX.utils.book_append_sheet(n,d,"Sheet1"),XLSX.writeFile(n,"SELLROBUX.COM SHOP MUA BÁN ACC ROBUX GIÁ RẺ.xlsx")}
+});</script>
+<!-- Alpine v3 phai nap SAU khi da dang ky alpine:init (thuoc tinh defer) -->
+<script defer src="<?= BASE_URL('public') ?>/assets/vendor/js/alpine3.min.js"></script>
 </html>

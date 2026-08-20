@@ -73,7 +73,11 @@ CheckLogin();
                                     </button>
                                 </li>
                                                     </ul>
-  <script src="<?= BASE_URL('public') ?>/assets/vendor/js/alpine.min.js" defer></script>
+  <?php /* FIX: da GO the nap Alpine v2.8.2 o day.
+           Ly do: footer.php dung Alpine.store()/Alpine.bind() la API cua
+           Alpine v3, ma v2 khong co => nap ca 2 phien ban se xung dot va
+           bao "Alpine is not defined". Alpine v3 nay duoc nap tap trung
+           1 lan duy nhat o cuoi footer.php cho toan bo site. */ ?>
     <style>
         .spin {
             animation: spin 1s infinite linear;

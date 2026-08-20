@@ -13,7 +13,7 @@ Không phải một lỗi duy nhất, mà là **8 lỗi cộng dồn**. Dưới 
 | # | Vấn đề | File | Hậu quả | Đã sửa |
 |---|--------|------|---------|--------|
 | 1 | **File bị mã hoá ionCube Encoder** | `core/helpers.php` | `index.php` require file này ở dòng 4 → thiếu ionCube Loader là **chết cả website** → 403 / 500 / trắng trang. **Đây là nguyên nhân số 1.** | Viết lại **toàn bộ 24 hàm** bằng PHP thuần |
-| 2 | **Thiế`DirectoryIndex`** | `.htaccess` | Apache/LiteSpeed không tự chọn `index.php`, kết hợp `Options -Indexes` → **403 ngay trang chủ** | Thêm `DirectoryIndex index.php index.html` |
+| 2 | **Thiếu `DirectoryIndex`** | `.htaccess` | Apache/LiteSpeed không tự chọn `index.php`, kết hợp `Options -Indexes` → **403 ngay trang chủ** | Thêm `DirectoryIndex index.php index.html` |
 | 3 | **Cú pháp Apache 2.2** (`Order Deny,Allow`, `satisfy all`) | `.htaccess` | Apache 2.4 không bật `mod_access_compat` → lỗi cú pháp → **500 toàn site** | Dùng song song cú pháp 2.2 + 2.4 qua `<IfModule>` |
 | 4 | **`AddHandler ...ea-php74___lsphp`** của cPanel hosting cũ | `.htaccess` | Hosting mới không có package `ea-php74` → Apache không xử lý được `.php` → **403 hoặc tải file .php về máy** | Đã xoá |
 | 5 | **`.env` bị đảo giá trị** (`DB_DATABASE=root`, `DB_USERNAME=sellgame`) | `.env` | `mysqli_connect()` thất bại → in `BẢO TRÌ HỆ THỐNG` | Đảo lại đúng thứ tự |
@@ -219,6 +219,18 @@ php -S localhost:3000 router.php
 | **Runtime** | **0 PHP Warning / Notice / Fatal** trên mọi route |
 | **ionCube** | ❌ **Không còn cần thiết** |
 | **Repo** | https://github.com/Polyphia2008/shop-roblox |
+| **Preview (tạm thời)** | https://3000-ip4grk9ihqlgu7vx1jtvr-8f57ffe2.sandbox.novita.ai |
+
+### Kết quả kiểm thử
+
+| Nhóm | Kết quả |
+|------|---------|
+| 18 route khách hàng | ✅ HTTP 200 |
+| 18 route quản trị | ✅ HTTP 200 (khi đã đăng nhập admin) |
+| URL không tồn tại | ✅ HTTP 404 (đúng chuẩn, trước đây trả 200 hoặc Fatal error) |
+| `.env`, `core/`, `vendor/`, `cron/`, `*.sql`, `error_log`, `.git/` | ✅ HTTP 403 (bị chặn) |
+| Directory Traversal (`?module=../../`) | ✅ HTTP 404 (bị chặn) |
+| PHP Warning / Notice / Fatal | ✅ **0 lỗi** trên toàn bộ route |
 
 > ⚠️ Đây là ứng dụng PHP truyền thống, **không thể** deploy lên
 > Cloudflare Pages/Workers. Cần hosting hỗ trợ PHP + MySQL.

@@ -1,9 +1,314 @@
+/**
+ * ==================================================================
+ *  app.css — Tailwind CSS v4.1.8
+ * ------------------------------------------------------------------
+ *  Bộ design token dưới đây lấy ĐÚNG theo bản build tham chiếu:
+ *  https://license.thegioidev.com/assets/css/styles.css
+ *  (cùng Tailwind 4.1.8, cùng hệ màu oklch, cùng --radius: .5rem,
+ *   cùng --primary: #1379f0).
+ *
+ *  Tailwind v4 cấu hình bằng CSS (@theme) thay cho tailwind.config.js.
+ * ==================================================================
+ */
+
 @import 'tailwindcss';
 
+/* Quét class trong Blade để tree-shake CSS không dùng tới */
+@source '../views/**/*.blade.php';
+@source '../js/**/*.js';
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
-@source '../../storage/framework/views/*.php';
 
-@theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+/* ==================================================================
+ *  1) BIẾN MÀU — sao chép từ bản build tham chiếu
+ * ================================================================== */
+:root {
+    --background: oklch(100% 0 0);
+    --foreground: oklch(27.4% 0.006 286.033);
+    --card: oklch(100% 0 0);
+    --card-foreground: oklch(27.4% 0.006 286.033);
+    --popover: oklch(100% 0 0);
+    --popover-foreground: oklch(27.4% 0.006 286.033);
+    --primary: #1379f0;
+    --primary-foreground: oklch(100% 0 0);
+    --secondary: oklch(96.7% 0.003 264.542);
+    --secondary-foreground: oklch(44.6% 0.03 256.802);
+    --muted: oklch(96.7% 0.003 264.542);
+    --muted-foreground: oklch(70.5% 0.015 286.067);
+    --accent: oklch(96.7% 0.003 264.542);
+    --accent-foreground: oklch(21% 0.006 285.885);
+    --destructive: oklch(57.7% 0.245 27.325);
+    --destructive-foreground: oklch(100% 0 0);
+    --mono: oklch(14.1% 0.005 285.823);
+    --mono-foreground: oklch(100% 0 0);
+    --border: oklch(94% 0.004 286.32);
+    --input: oklch(92% 0.004 286.32);
+    --ring: oklch(87.1% 0.006 286.286);
+    --radius: 0.5rem;
+
+    /* Màu trạng thái bổ sung cho nghiệp vụ shop */
+    --success: oklch(64.8% 0.15 160);
+    --success-foreground: oklch(100% 0 0);
+    --warning: oklch(79.5% 0.162 86);
+    --warning-foreground: oklch(27.4% 0.006 286.033);
+}
+
+/* Chế độ tối — cùng thang màu với bản tham chiếu */
+.dark {
+    --background: oklch(14.1% 0.005 285.823);
+    --foreground: oklch(98.5% 0 0);
+    --card: oklch(21% 0.006 285.885);
+    --card-foreground: oklch(98.5% 0 0);
+    --popover: oklch(21% 0.006 285.885);
+    --popover-foreground: oklch(98.5% 0 0);
+    --primary: #1379f0;
+    --primary-foreground: oklch(100% 0 0);
+    --secondary: oklch(27.4% 0.006 286.033);
+    --secondary-foreground: oklch(98.5% 0 0);
+    --muted: oklch(27.4% 0.006 286.033);
+    --muted-foreground: oklch(70.5% 0.015 286.067);
+    --accent: oklch(27.4% 0.006 286.033);
+    --accent-foreground: oklch(98.5% 0 0);
+    --destructive: oklch(57.7% 0.245 27.325);
+    --destructive-foreground: oklch(100% 0 0);
+    --mono: oklch(87.1% 0.006 286.286);
+    --mono-foreground: oklch(0% 0 0);
+    --border: oklch(27.4% 0.006 286.033);
+    --input: oklch(27.4% 0.006 286.033);
+    --ring: oklch(27.4% 0.006 286.033);
+}
+
+/* ==================================================================
+ *  2) @theme — map biến CSS thành utility class
+ *     (bg-primary, text-muted-foreground, rounded-lg, ...)
+ * ================================================================== */
+@theme inline {
+    --color-background: var(--background);
+    --color-foreground: var(--foreground);
+    --color-card: var(--card);
+    --color-card-foreground: var(--card-foreground);
+    --color-popover: var(--popover);
+    --color-popover-foreground: var(--popover-foreground);
+    --color-primary: var(--primary);
+    --color-primary-foreground: var(--primary-foreground);
+    --color-secondary: var(--secondary);
+    --color-secondary-foreground: var(--secondary-foreground);
+    --color-muted: var(--muted);
+    --color-muted-foreground: var(--muted-foreground);
+    --color-accent: var(--accent);
+    --color-accent-foreground: var(--accent-foreground);
+    --color-destructive: var(--destructive);
+    --color-destructive-foreground: var(--destructive-foreground);
+    --color-success: var(--success);
+    --color-success-foreground: var(--success-foreground);
+    --color-warning: var(--warning);
+    --color-warning-foreground: var(--warning-foreground);
+    --color-mono: var(--mono);
+    --color-mono-foreground: var(--mono-foreground);
+    --color-border: var(--border);
+    --color-input: var(--input);
+    --color-ring: var(--ring);
+
+    --radius-xs: 0.125rem;
+    --radius-sm: calc(var(--radius) - 4px);
+    --radius-md: calc(var(--radius) - 2px);
+    --radius-lg: var(--radius);
+    --radius-xl: calc(var(--radius) + 4px);
+
+    --font-sans: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono',
+        'Courier New', monospace;
+}
+
+/* ==================================================================
+ *  3) Lớp nền
+ * ================================================================== */
+@layer base {
+    * {
+        border-color: var(--border);
+    }
+
+    html {
+        -webkit-text-size-adjust: 100%;
+        scroll-behavior: smooth;
+    }
+
+    body {
+        background-color: var(--background);
+        color: var(--foreground);
+        font-family: var(--font-sans);
+        -webkit-font-smoothing: antialiased;
+        -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* Viền focus rõ ràng — hỗ trợ điều hướng bàn phím (a11y) */
+    :focus-visible {
+        outline: 2px solid var(--primary);
+        outline-offset: 2px;
+    }
+
+    /* Ảnh dùng lazysizes: hiện mờ dần khi tải xong */
+    img.lazyload,
+    img.lazyloading {
+        opacity: 0;
+    }
+
+    img.lazyloaded {
+        opacity: 1;
+        transition: opacity 0.3s ease;
+    }
+}
+
+/* ==================================================================
+ *  4) Component dùng lại nhiều lần
+ * ------------------------------------------------------------------
+ *  LƯU Ý về Tailwind v4: trong v4, `@apply` KHÔNG dùng được với class
+ *  tự định nghĩa bên trong `@layer components`
+ *  (lỗi "Cannot apply unknown utility class `btn`").
+ *  Vì vậy các class nền tảng (btn / badge / alert) được khai báo bằng
+ *  chỉ thị `@utility` — đây là cách chính thức của v4 để tạo utility
+ *  tuỳ biến và vẫn @apply được ở nơi khác.
+ * ================================================================== */
+
+@utility btn {
+    @apply inline-flex items-center justify-center gap-2 whitespace-nowrap
+           rounded-md text-sm font-medium transition-colors
+           disabled:pointer-events-none disabled:opacity-50
+           focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none;
+}
+
+@utility badge {
+    @apply inline-flex items-center rounded-md px-2 py-0.5 text-xs font-medium;
+}
+
+@utility alert {
+    @apply rounded-md border px-4 py-3 text-sm;
+}
+
+@layer components {
+    .btn-primary {
+        @apply btn bg-primary text-primary-foreground h-9 px-4 hover:opacity-90;
+    }
+
+    .btn-secondary {
+        @apply btn bg-secondary text-secondary-foreground h-9 px-4 hover:opacity-90;
+    }
+
+    .btn-destructive {
+        @apply btn bg-destructive text-destructive-foreground h-9 px-4 hover:opacity-90;
+    }
+
+    .btn-outline {
+        @apply btn border border-border bg-background h-9 px-4 hover:bg-accent;
+    }
+
+    .btn-sm {
+        @apply h-8 px-3 text-xs;
+    }
+
+    .card {
+        @apply bg-card text-card-foreground border border-border rounded-lg shadow-sm;
+    }
+
+    .card-header {
+        @apply flex flex-col gap-1 border-b border-border px-5 py-4;
+    }
+
+    .card-title {
+        @apply text-base font-semibold leading-none;
+    }
+
+    .card-body {
+        @apply px-5 py-4;
+    }
+
+    .input {
+        @apply flex h-9 w-full rounded-md border border-input bg-background px-3 py-1
+               text-sm shadow-sm transition-colors
+               placeholder:text-muted-foreground
+               focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none
+               disabled:cursor-not-allowed disabled:opacity-50;
+    }
+
+    .label {
+        @apply text-sm font-medium leading-none;
+    }
+
+    .badge-success {
+        @apply badge bg-success text-success-foreground;
+    }
+
+    .badge-warning {
+        @apply badge bg-warning text-warning-foreground;
+    }
+
+    .badge-destructive {
+        @apply badge bg-destructive text-destructive-foreground;
+    }
+
+    .badge-secondary {
+        @apply badge bg-secondary text-secondary-foreground;
+    }
+
+    .table-wrap {
+        @apply w-full overflow-x-auto;
+    }
+
+    .table {
+        @apply w-full caption-bottom text-sm;
+    }
+
+    .table thead th {
+        @apply h-10 px-3 text-left align-middle text-xs font-medium
+               text-muted-foreground whitespace-nowrap;
+    }
+
+    .table tbody tr {
+        @apply border-t border-border transition-colors;
+    }
+
+    .table tbody td {
+        @apply px-3 py-3 align-middle;
+    }
+
+    .alert-error {
+        @apply alert border-destructive/30 bg-destructive/10 text-destructive;
+    }
+
+    .alert-success {
+        @apply alert border-success/30 bg-success/10;
+        color: var(--success);
+    }
+}
+
+/* ==================================================================
+ *  5) Utility bổ sung
+ * ================================================================== */
+@layer utilities {
+    /* Ẩn thanh cuộn nhưng vẫn cuộn được */
+    .no-scrollbar {
+        scrollbar-width: none;
+        -ms-overflow-style: none;
+    }
+
+    .no-scrollbar::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Giữ chỗ ảnh khi chưa tải — chống layout shift (CLS) */
+    .aspect-thumb {
+        aspect-ratio: 16 / 9;
+    }
+}
+
+/* Tôn trọng thiết lập giảm chuyển động của hệ điều hành */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
 }

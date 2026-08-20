@@ -478,10 +478,10 @@
         });
     }
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.5/xlsx.full.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="<?= BASE_URL('public') ?>/assets/vendor/js/xlsx.full.min.js"></script>
+<script src="<?= BASE_URL('public') ?>/assets/vendor/js/swiper-bundle.min.js"></script>
 
-<script src="/livewire/livewire.min.js?id=38dc8241"   data-csrf="B1xDFsgUOQRtOkyLwQeTFJZY0hyjuOhS2FYHPXrZ" data-update-uri="/livewire/update" data-navigate-once="true"></script>
+<!-- FIX: /livewire/livewire.min.js KHONG TON TAI (tan tich tu template Laravel/Livewire). The script nay gay loi 404 tren MOI trang. Da vo hieu hoa. -->
 <script>Alpine.store("editItem",{item:{},update(t){this.item=t}});Alpine.store("reportItem",{id:{},update(t){this.id=t,document.getElementById("report_id").value=t,document.getElementById("report_id").dispatchEvent(new Event("input"))}});Alpine.bind("exportExcel",()=>({type:"button","@click"(t){const e=t.target.getAttribute("data-id");e&&a(e)}}));Alpine.bind("buyItem",()=>({type:"button","@click"(t){const e=t.target.getAttribute("data-id");document.getElementById("itemBuyId").value=e,document.getElementById("itemBuyId").dispatchEvent(new Event("input")),document.getElementById("accNumber").innerText=e;const n=new CustomEvent("showModal",{detail:{modalId:"confirmBuy"}});
 window.dispatchEvent(n)}}));Alpine.bind("detailItem",()=>({type:"button","@click"(t){t.target.getAttribute("data-id")}}));Alpine.bind("preBuyItem",()=>({type:"button","@click"(t){const e=t.target.getAttribute("data-id");document.getElementById("itemBuyPreId").value=e,document.getElementById("itemBuyPreId").dispatchEvent(new Event("input")),document.getElementById("accNumberPre").innerText=e;const n=new CustomEvent("showModal",{detail:{modalId:"confirmBuyOrder"}});window.dispatchEvent(n)}}));Alpine.bind("detailItemPre",()=>({type:"button","@click"(t){const e=t.target.getAttribute("data-id");
 document.getElementById("accNumberDetailPre").innerText=e,document.getElementById("roboxDetailPre").innerText=t.target.getAttribute("data-robox"),document.getElementById("rateDetailPre").innerText=t.target.getAttribute("data-rate"),

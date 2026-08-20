@@ -49,7 +49,7 @@ if (!defined('IN_SITE')) {
     <!-- Icons Css -->
     <link href="<?=BASE_URL('public/admin/ducapi/');?>theme/assets/css/icons.css" rel="stylesheet">
     
-    <link href="https://cdn.jsdelivr.net/npm/remixicon@2.5.0/fonts/remixicon.css" rel="stylesheet">
+    <link href="<?= BASE_URL('public') ?>/assets/vendor/css/remixicon.css" rel="stylesheet">
 
 
     <!-- Node Waves Css -->
@@ -71,9 +71,9 @@ if (!defined('IN_SITE')) {
     <link rel="stylesheet" href="<?=BASE_URL('public/admin/ducapi/');?>theme/assets/libs/glightbox/css/glightbox.min.css">
     
     <!-- Simple Notify CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-notify@1.0.4/dist/simple-notify.css" />
+    <link rel="stylesheet" href="<?= BASE_URL('public') ?>/assets/vendor/css/simple-notify.css" />
     <!-- Simple Notify JS -->
-    <script src="https://cdn.jsdelivr.net/npm/simple-notify@1.0.4/dist/simple-notify.min.js"></script>
+    <script src="<?= BASE_URL('public') ?>/assets/vendor/js/simple-notify.min.js"></script>
  
     <!-- Sweetalerts CSS -->
     <link rel="stylesheet" href="<?=BASE_URL('public/admin/ducapi/');?>theme/assets/libs/sweetalert2/sweetalert2.min.css">
@@ -96,11 +96,11 @@ if (!defined('IN_SITE')) {
 
  <script  src="<?=BASE_URL('public/admin/');?>ckeditor/ckeditor.js"></script>
     
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="<?= BASE_URL('public') ?>/assets/vendor/js/chart.js"></script>
  
  
     
-<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js"></script>
+<script src="<?= BASE_URL('public') ?>/assets/vendor/js/clipboard.min.js"></script>
 
     <?=$body['header'];?>
 

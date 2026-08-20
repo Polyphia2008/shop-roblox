@@ -1,5 +1,5 @@
 
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="<?= BASE_URL('public') ?>/assets/vendor/js/sweetalert2@11.js"></script>
 <?php 
 if (!defined('IN_SITE')) {
     die('The Request Not Found');

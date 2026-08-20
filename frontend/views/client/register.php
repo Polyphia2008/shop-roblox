@@ -103,7 +103,7 @@ require_once __DIR__ . '/header.php';
         });
     });
 </script>
-<script src="/livewire/livewire.min.js?id=38dc8241" data-csrf="jtGTKZxER6ONMeziG6EOBtw6cSeIqzZbLLeMphvc" data-update-uri="/livewire/update" data-navigate-once="true"></script>
+<!-- FIX: /livewire/livewire.min.js KHONG TON TAI (tan tich tu template Laravel/Livewire). The script nay gay loi 404 tren MOI trang. Da vo hieu hoa. -->
 
 
 </body>

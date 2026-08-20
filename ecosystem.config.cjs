@@ -11,7 +11,7 @@ module.exports = {
       instances: 1,
       watch: false,
       env: {
-        PHP_CLI_SERVER_WORKERS: '4'
+        PHP_CLI_SERVER_WORKERS: '12'
       }
     }
   ]

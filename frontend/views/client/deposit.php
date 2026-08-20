@@ -73,7 +73,7 @@ CheckLogin();
                                     </button>
                                 </li>
                                                     </ul>
-  <script src="https://cdn.jsdelivr.net/npm/alpinejs@2.8.2/dist/alpine.min.js" defer></script>
+  <script src="<?= BASE_URL('public') ?>/assets/vendor/js/alpine.min.js" defer></script>
     <style>
         .spin {
             animation: spin 1s infinite linear;

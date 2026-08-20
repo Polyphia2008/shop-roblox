@@ -21,7 +21,7 @@ $homeUrl = function_exists('BASE_URL') ? BASE_URL('') : '/';
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>404 - Không tìm thấy trang</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="<?= BASE_URL('public') ?>/assets/vendor/css/fontawesome6.min.css" rel="stylesheet">
 </head>
 <body class="bg-slate-900 text-slate-200 min-h-screen flex items-center justify-center px-4">
     <main id="error-page" class="text-center max-w-lg">

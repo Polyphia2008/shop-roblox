@@ -69,15 +69,83 @@ function SITE_ROOT_URL()
         return $root = rtrim($_SERVER['APP_URL'], '/') . '/';
     }
 
-    /* Nhận diện HTTPS: hỗ trợ cả reverse proxy / Cloudflare */
+    /* ----------------------------------------------------------
+     * NHẬN DIỆN HTTPS
+     * ----------------------------------------------------------
+     * SỬA LỖI MẤT CSS (Mixed Content):
+     *
+     * Khi website chạy sau reverse proxy / CDN (Cloudflare, nginx,
+     * LiteSpeed, gateway của hosting...) thì proxy đã "gỡ" SSL,
+     * nên PHP nhận request dạng HTTP thuần => $_SERVER['HTTPS']
+     * LUÔN có giá trị "off".
+     *
+     * Hệ quả: hàm này sinh ra link "http://..." trong khi người
+     * dùng đang xem trang bằng "https://...". Trình duyệt sẽ CHẶN
+     * toàn bộ file CSS/JS đó vì lỗi Mixed Content (chặn âm thầm,
+     * không báo lỗi trên trang) => TRANG BỊ MẤT ĐỊNH DẠNG / MẤT CSS
+     * dù file CSS vẫn tồn tại và vẫn truy cập được trực tiếp.
+     *
+     * Mỗi nhà cung cấp lại dùng TÊN HEADER KHÁC NHAU, nên phải
+     * kiểm tra đầy đủ chứ không chỉ X-Forwarded-Proto:
+     *   - X-Forwarded-Proto  : chuẩn chung (nginx, Cloudflare, AWS)
+     *   - X-Forwarded-Scheme : Apache mod_proxy
+     *   - X-Client-Proto     : gateway Tencent / Novita
+     *   - X-Url-Scheme       : IIS ARR
+     *   - X-Forwarded-Ssl / Front-End-Https : ISA/TMG, một số LB
+     *   - CF-Visitor         : Cloudflare (dạng JSON {"scheme":"https"})
+     * ---------------------------------------------------------- */
     $https = false;
+
+    /* 1) Trường hợp máy chủ chạy SSL trực tiếp */
     if (!empty($_SERVER['HTTPS']) && strtolower($_SERVER['HTTPS']) !== 'off') {
         $https = true;
-    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_PROTO'])
-        && strtolower($_SERVER['HTTP_X_FORWARDED_PROTO']) === 'https') {
+    } elseif (!empty($_SERVER['REQUEST_SCHEME'])
+        && strtolower($_SERVER['REQUEST_SCHEME']) === 'https') {
         $https = true;
-    } elseif (!empty($_SERVER['SERVER_PORT']) && (int) $_SERVER['SERVER_PORT'] === 443) {
-        $https = true;
+    } else {
+        /* 2) Các header dạng "https" / "http" */
+        $protoHeaders = array(
+            'HTTP_X_FORWARDED_PROTO',
+            'HTTP_X_FORWARDED_SCHEME',
+            'HTTP_X_CLIENT_PROTO',
+            'HTTP_X_URL_SCHEME',
+            'HTTP_X_SCHEME',
+        );
+        foreach ($protoHeaders as $h) {
+            if (empty($_SERVER[$h])) {
+                continue;
+            }
+            /* Có thể là "https,http" khi qua nhiều lớp proxy -> lấy giá trị đầu */
+            $parts = explode(',', (string) $_SERVER[$h]);
+            if (strtolower(trim($parts[0])) === 'https') {
+                $https = true;
+                break;
+            }
+        }
+
+        /* 3) Các header dạng cờ bật/tắt: on / 1 / true */
+        if (!$https) {
+            $flagHeaders = array('HTTP_X_FORWARDED_SSL', 'HTTP_FRONT_END_HTTPS');
+            foreach ($flagHeaders as $h) {
+                if (!empty($_SERVER[$h])
+                    && in_array(strtolower((string) $_SERVER[$h]), array('on', '1', 'true'), true)) {
+                    $https = true;
+                    break;
+                }
+            }
+        }
+
+        /* 4) Cloudflare CF-Visitor: {"scheme":"https"} */
+        if (!$https && !empty($_SERVER['HTTP_CF_VISITOR'])
+            && stripos((string) $_SERVER['HTTP_CF_VISITOR'], 'https') !== false) {
+            $https = true;
+        }
+
+        /* 5) Cuối cùng mới xét cổng 443 */
+        if (!$https && !empty($_SERVER['SERVER_PORT'])
+            && (int) $_SERVER['SERVER_PORT'] === 443) {
+            $https = true;
+        }
     }
 
     $scheme = $https ? 'https' : 'http';

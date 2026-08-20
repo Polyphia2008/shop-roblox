@@ -40,9 +40,9 @@
     <link rel="stylesheet" href="<?= BASE_URL('public') ?>/assets/css/tailwind2.css?v=2">
     <link rel="stylesheet" href="<?= BASE_URL('public') ?>/assets/css/custom.css?v=1.0.17">
 
-    <link rel="preload" as="style" href="<?= BASE_URL('public') ?>/assets/appv2-DmMK7LU4.css" />
-    <link rel="stylesheet" href="<?= BASE_URL('public') ?>/assets/appv2-DmMK7LU4.css" data-navigate-track="reload" />  
-    <link href="https://unpkg.com/swiper/swiper-bundle.min.css" rel="stylesheet" />
+    <link rel="preload" as="style" href="<?= BASE_URL('public') ?>/assets/css/appv2-DmMK7LU4.css" />
+    <link rel="stylesheet" href="<?= BASE_URL('public') ?>/assets/css/appv2-DmMK7LU4.css" data-navigate-track="reload" />  
+    <link href="<?= BASE_URL('public') ?>/assets/vendor/css/swiper-bundle.min.css" rel="stylesheet" />
    
     <!-- Livewire Styles --><style >[wire\:loading][wire\:loading], [wire\:loading\.delay][wire\:loading\.delay], [wire\:loading\.inline-block][wire\:loading\.inline-block], [wire\:loading\.inline][wire\:loading\.inline], [wire\:loading\.block][wire\:loading\.block], [wire\:loading\.flex][wire\:loading\.flex], [wire\:loading\.table][wire\:loading\.table], [wire\:loading\.grid][wire\:loading\.grid], [wire\:loading\.inline-flex][wire\:loading\.inline-flex] {display: none;}[wire\:loading\.delay\.none][wire\:loading\.delay\.none], [wire\:loading\.delay\.shortest][wire\:loading\.delay\.shortest], [wire\:loading\.delay\.shorter][wire\:loading\.delay\.shorter], [wire\:loading\.delay\.short][wire\:loading\.delay\.short], [wire\:loading\.delay\.default][wire\:loading\.delay\.default], [wire\:loading\.delay\.long][wire\:loading\.delay\.long], [wire\:loading\.delay\.longer][wire\:loading\.delay\.longer], [wire\:loading\.delay\.longest][wire\:loading\.delay\.longest] {display: none;}[wire\:offline][wire\:offline] {display: none;}[wire\:dirty]:not(textarea):not(input):not(select) {display: none;}:root {--livewire-progress-bar-color: #2299dd;}[x-cloak] {display: none !important;}</style>
     <!-- Google tag (gtag.js) -->
@@ -73,20 +73,20 @@
         /*}*/
     </style>
        <!-- jQuery -->
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="<?= BASE_URL('public') ?>/assets/vendor/js/jquery-3.6.0.min.js"></script>
 
 <!-- Font Awesome for spinner -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+<link rel="stylesheet" href="<?= BASE_URL('public') ?>/assets/vendor/css/fontawesome6.min.css" />
 
 <!-- SweetAlert2 -->
-<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="<?= BASE_URL('public') ?>/assets/vendor/js/sweetalert2@11.js"></script>
 
 <!-- Simple Notify -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/simple-notify@1.0.4/dist/simple-notify.css">
-<script src="https://cdn.jsdelivr.net/npm/simple-notify@1.0.4/dist/simple-notify.min.js"></script>
+<link rel="stylesheet" href="<?= BASE_URL('public') ?>/assets/vendor/css/simple-notify.css">
+<script src="<?= BASE_URL('public') ?>/assets/vendor/js/simple-notify.min.js"></script>
 
 <!-- Fancybox (if needed) -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fancybox/3.5.7/jquery.fancybox.min.js"></script>
+<script src="<?= BASE_URL('public') ?>/assets/vendor/js/jquery.fancybox.min.js"></script>
 <style> .success-ducapi {
       background-color: #d9f3f0; /* Màu xanh nhạt mới */
       color: #027368; /* Màu chữ xanh đậm */

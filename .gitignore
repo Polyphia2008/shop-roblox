@@ -1,0 +1,51 @@
+# ==================================================================
+#  .gitignore
+# ==================================================================
+
+# --- Cấu hình chứa MẬT KHẨU - TUYỆT ĐỐI KHÔNG commit ---
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# --- Log ---
+error_log
+*.log
+logs/
+.pm2/
+
+# --- Bản backup / nén ---
+*.tar.gz
+*.tgz
+*.zip
+*.bak
+*.backup
+*.sql.gz
+
+# --- Hệ điều hành / editor ---
+.DS_Store
+Thumbs.db
+desktop.ini
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# --- PHP ---
+# LƯU Ý: thư mục vendor/ VẪN ĐƯỢC COMMIT.
+# Lý do: hosting chia sẻ (shared hosting) thường không có quyền chạy
+# composer install, nên cần vendor/ có sẵn để site chạy được ngay.
+
+# --- Cache / tạm ---
+cache/
+tmp/
+temp/
+*.cache
+
+# --- File upload của người dùng (nếu có) ---
+public/uploads/*
+!public/uploads/.gitkeep
+
+# --- Node (không dùng nhưng đề phòng) ---
+node_modules/

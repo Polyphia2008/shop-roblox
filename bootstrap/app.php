@@ -3,6 +3,7 @@
 use App\Http\Middleware\DetectSqlInjection;
 use App\Http\Middleware\EnsureUserIsAdmin;
 use App\Http\Middleware\EnsureUserIsNotBanned;
+use App\Http\Middleware\NormalizeProxyHeaders;
 use App\Http\Middleware\SecurityHeaders;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -24,6 +25,15 @@ return Application::configure(basePath: dirname(__DIR__))
          */
         $middleware->append(SecurityHeaders::class);
         $middleware->append(DetectSqlInjection::class);
+
+        /*
+         * Dịch header proxy không chuẩn (X-Client-Proto, CF-Visitor...) sang
+         * X-Forwarded-Proto. PHẢI chạy TRƯỚC TrustProxies, nên dùng prepend:
+         * TrustProxies chỉ đọc header chuẩn, nếu không dịch trước thì Laravel
+         * tưởng request là HTTP và sinh redirect `http://` -> trình duyệt đang
+         * ở HTTPS bị treo, cookie Secure không được gửi kèm.
+         */
+        $middleware->prepend(NormalizeProxyHeaders::class);
 
         /* Tin cậy header proxy của Cloudflare để lấy đúng IP + scheme HTTPS */
         $middleware->trustProxies(at: '*');

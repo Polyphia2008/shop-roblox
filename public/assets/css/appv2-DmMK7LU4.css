@@ -1,0 +1,62 @@
+.btn-main {
+    border-width: 2px;
+    border-radius: 12px;
+    --tw-border-opacity: 1;
+    border-color: rgb(196 108 255 / var(--tw-border-opacity));
+    --tw-bg-opacity: 1;
+    background-color: rgb(157 44 231 / var(--tw-bg-opacity))
+}
+
+.btn-main:hover {
+    opacity: .8
+}
+
+.modal-detail-right {
+    background: radial-gradient(118.55% 187.19% at 100.01% 2.09%,#f9c64259,#0000),#09090954;
+    border-bottom-width: 2px;
+    border-radius: 10px
+}
+
+figcaption {
+    display: none
+}
+
+@media only screen and (max-width: 600px) {
+    .w-vertical-menu {
+        width:14.25rem!important
+    }
+
+    #label-swtich {
+        display: none
+    }
+
+    .btn-rate {
+        font-size: 11px!important;
+        padding-left: 5px!important;
+        padding-right: 5px!important
+    }
+}
+
+@media only screen and (max-width: 700px) {
+    .footer-column {
+        display:none
+    }
+}
+
+.box-silder .animate-infinite-scroll {
+    animation: scroll-horizontal 40s linear infinite
+}
+
+@keyframes scroll-horizontal {
+    0% {
+        transform: translate(100%)
+    }
+
+    to {
+        transform: translate(-100%)
+    }
+}
+
+.gap-4rem {
+    gap: 4rem
+}

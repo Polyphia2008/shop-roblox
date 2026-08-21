@@ -11,7 +11,20 @@
  * ==================================================================
  */
 
-@import 'tailwindcss';
+/* ------------------------------------------------------------------
+ *  QUAN TRỌNG — vì sao KHÔNG dùng `@import 'tailwindcss'`:
+ *
+ *  Giao diện chính của site là theme gốc Tailwick
+ *  (public/assets/css/tailwind2.css) — bản đó ĐÃ chứa preflight của
+ *  Tailwind 3. Nếu file này import 'tailwindcss' đầy đủ, preflight của
+ *  Tailwind 4 sẽ nạp lần thứ hai và reset lại margin/border/font của
+ *  theme -> vỡ layout (card mất viền, sai font, spacing lệch).
+ *
+ *  Nên ta chỉ import `theme` (biến) + `utilities` (class), BỎ preflight.
+ *  Theme gốc giữ vai trò reset duy nhất.
+ * ------------------------------------------------------------------ */
+@import 'tailwindcss/theme.css' layer(theme);
+@import 'tailwindcss/utilities.css' layer(utilities);
 
 /* Quét class trong Blade để tree-shake CSS không dùng tới */
 @source '../views/**/*.blade.php';
@@ -21,60 +34,91 @@
 /* ==================================================================
  *  1) BIẾN MÀU — sao chép từ bản build tham chiếu
  * ================================================================== */
+/* ------------------------------------------------------------------
+ *  Các token ngữ nghĩa (--background, --border, --muted-foreground...)
+ *  được view dùng RẤT nhiều (text-muted-foreground 153 lần,
+ *  border-border 17 lần, bg-card 2 lần). Trước đây chúng mang thang màu
+ *  oklch riêng -> lệch tông so với theme gốc Tailwick, khiến trang mới
+ *  "hơi khác màu" trang cũ dù cùng bố cục.
+ *
+ *  Nay ánh xạ 1:1 sang ĐÚNG giá trị RGB đọc trực tiếp từ tailwind2.css:
+ *      --background        = .bg-body-bg      rgb(241 245 249)  slate-100
+ *      --foreground        = .text-body       rgb(30 41 59)     slate-800
+ *      --card              = .card            #fff  (dark rgb(19 35 55))
+ *      --border            = .border-slate-200 rgb(226 232 240)
+ *      --muted-foreground  = .text-slate-500  rgb(100 116 139)
+ *      --primary           = .bg-custom-500   rgb(59 130 246)
+ *  => 172 chỗ dùng token tự khớp tông theme, KHÔNG phải sửa view nào.
+ * ------------------------------------------------------------------ */
 :root {
-    --background: oklch(100% 0 0);
-    --foreground: oklch(27.4% 0.006 286.033);
-    --card: oklch(100% 0 0);
-    --card-foreground: oklch(27.4% 0.006 286.033);
-    --popover: oklch(100% 0 0);
-    --popover-foreground: oklch(27.4% 0.006 286.033);
-    --primary: #1379f0;
-    --primary-foreground: oklch(100% 0 0);
-    --secondary: oklch(96.7% 0.003 264.542);
-    --secondary-foreground: oklch(44.6% 0.03 256.802);
-    --muted: oklch(96.7% 0.003 264.542);
-    --muted-foreground: oklch(70.5% 0.015 286.067);
-    --accent: oklch(96.7% 0.003 264.542);
-    --accent-foreground: oklch(21% 0.006 285.885);
-    --destructive: oklch(57.7% 0.245 27.325);
-    --destructive-foreground: oklch(100% 0 0);
-    --mono: oklch(14.1% 0.005 285.823);
-    --mono-foreground: oklch(100% 0 0);
-    --border: oklch(94% 0.004 286.32);
-    --input: oklch(92% 0.004 286.32);
-    --ring: oklch(87.1% 0.006 286.286);
-    --radius: 0.5rem;
+    --background: rgb(241 245 249); /* slate-100 = bg-body-bg */
+    --foreground: rgb(30 41 59); /* slate-800 = text-body  */
+    --card: rgb(255 255 255); /* .card                  */
+    --card-foreground: rgb(30 41 59);
+    --popover: rgb(255 255 255);
+    --popover-foreground: rgb(30 41 59);
+    --primary: rgb(59 130 246); /* custom-500             */
+    --primary-foreground: rgb(255 255 255);
+    --secondary: rgb(241 245 249); /* slate-100              */
+    --secondary-foreground: rgb(71 85 105); /* slate-600              */
+    --muted: rgb(241 245 249);
+    --muted-foreground: rgb(100 116 139); /* slate-500              */
+    --accent: rgb(241 245 249);
+    --accent-foreground: rgb(30 41 59);
+    --destructive: rgb(239 68 68); /* red-500                */
+    --destructive-foreground: rgb(255 255 255);
+    --mono: rgb(15 23 42); /* slate-900              */
+    --mono-foreground: rgb(255 255 255);
+    --border: rgb(226 232 240); /* slate-200              */
+    --input: rgb(226 232 240);
+    --ring: rgb(59 130 246); /* custom-500             */
+    --radius: 0.375rem; /* .card dùng .375rem     */
 
-    /* Màu trạng thái bổ sung cho nghiệp vụ shop */
-    --success: oklch(64.8% 0.15 160);
-    --success-foreground: oklch(100% 0 0);
-    --warning: oklch(79.5% 0.162 86);
-    --warning-foreground: oklch(27.4% 0.006 286.033);
+    /* Màu trạng thái bổ sung cho nghiệp vụ shop — cùng thang theme */
+    --success: rgb(34 197 94); /* green-500              */
+    --success-foreground: rgb(255 255 255);
+    --warning: rgb(234 179 8); /* yellow-500             */
+    --warning-foreground: rgb(30 41 59);
 }
 
-/* Chế độ tối — cùng thang màu với bản tham chiếu */
-.dark {
-    --background: oklch(14.1% 0.005 285.823);
-    --foreground: oklch(98.5% 0 0);
-    --card: oklch(21% 0.006 285.885);
-    --card-foreground: oklch(98.5% 0 0);
-    --popover: oklch(21% 0.006 285.885);
-    --popover-foreground: oklch(98.5% 0 0);
-    --primary: #1379f0;
-    --primary-foreground: oklch(100% 0 0);
-    --secondary: oklch(27.4% 0.006 286.033);
-    --secondary-foreground: oklch(98.5% 0 0);
-    --muted: oklch(27.4% 0.006 286.033);
-    --muted-foreground: oklch(70.5% 0.015 286.067);
-    --accent: oklch(27.4% 0.006 286.033);
-    --accent-foreground: oklch(98.5% 0 0);
-    --destructive: oklch(57.7% 0.245 27.325);
-    --destructive-foreground: oklch(100% 0 0);
-    --mono: oklch(87.1% 0.006 286.286);
-    --mono-foreground: oklch(0% 0 0);
-    --border: oklch(27.4% 0.006 286.033);
-    --input: oklch(27.4% 0.006 286.033);
-    --ring: oklch(27.4% 0.006 286.033);
+/* ------------------------------------------------------------------
+ *  Biến thể `dark:` phải khớp CÁCH BẬT TỐI của theme gốc.
+ *
+ *  Theme Tailwick bật tối bằng thuộc tính trên <html>: [data-mode=dark]
+ *  (do assets/js/layout.js + tailwick.bundle.js đặt). Tailwind v4 mặc
+ *  định lại dùng `prefers-color-scheme`. Nếu không khai báo lại, class
+ *  `dark:` sinh từ file này sẽ không bao giờ khớp trạng thái tối của
+ *  theme -> giao diện tối bị "nửa vời" (theme đổi, phần mới thì không).
+ * ------------------------------------------------------------------ */
+@custom-variant dark (&:where([data-mode="dark"], [data-mode="dark"] *));
+
+/* Chế độ tối — ánh xạ sang thang `zink` của theme gốc:
+ *   --background = .dark\:bg-zink-800  rgb(15 24 36)
+ *   --card       = :is([data-mode=dark] .card) rgb(19 35 55) = zink-700
+ *   --border     = .dark\:border-zink-500 rgb(35 58 87)
+ *   --muted-foreground = .text-zink-200 rgb(146 175 211) */
+[data-mode='dark'] {
+    --background: rgb(15 24 36); /* zink-800 */
+    --foreground: rgb(200 215 233); /* zink-100 */
+    --card: rgb(19 35 55); /* zink-700 */
+    --card-foreground: rgb(200 215 233);
+    --popover: rgb(28 46 69); /* zink-600 */
+    --popover-foreground: rgb(200 215 233);
+    --primary: rgb(59 130 246);
+    --primary-foreground: rgb(255 255 255);
+    --secondary: rgb(28 46 69); /* zink-600 */
+    --secondary-foreground: rgb(200 215 233);
+    --muted: rgb(28 46 69);
+    --muted-foreground: rgb(146 175 211); /* zink-200 */
+    --accent: rgb(28 46 69);
+    --accent-foreground: rgb(200 215 233);
+    --destructive: rgb(239 68 68);
+    --destructive-foreground: rgb(255 255 255);
+    --mono: rgb(226 234 243); /* zink-50  */
+    --mono-foreground: rgb(15 24 36);
+    --border: rgb(35 58 87); /* zink-500 */
+    --input: rgb(35 58 87);
+    --ring: rgb(59 130 246);
 }
 
 /* ==================================================================
@@ -113,6 +157,37 @@
     --radius-md: calc(var(--radius) - 2px);
     --radius-lg: var(--radius);
     --radius-xl: calc(var(--radius) + 4px);
+
+    /* ------------------------------------------------------------------
+     *  Palette của THEME GỐC Tailwick (zink = xám xanh, custom = màu nhấn).
+     *  Giá trị trích đúng từ public/assets/css/tailwind2.css.
+     *
+     *  Phải khai báo ở đây để các class như `dark:border-zink-500` hay
+     *  `text-custom-500` viết trong Blade được Tailwind 4 nhận diện —
+     *  thiếu thì build đứt với "Cannot apply unknown utility class".
+     * ------------------------------------------------------------------ */
+    --color-zink-50: rgb(226 234 243);
+    --color-zink-100: rgb(200 215 233);
+    --color-zink-200: rgb(146 175 211);
+    --color-zink-300: rgb(88 133 188);
+    --color-zink-400: rgb(57 95 142);
+    --color-zink-500: rgb(35 58 87);
+    --color-zink-600: rgb(28 46 69);
+    --color-zink-700: rgb(19 35 55);
+    --color-zink-800: rgb(15 24 36);
+    --color-zink-900: rgb(7 12 18);
+
+    --color-custom-50: rgb(239 246 255);
+    --color-custom-100: rgb(219 234 254);
+    --color-custom-200: rgb(191 219 254);
+    --color-custom-300: rgb(147 197 253);
+    --color-custom-400: rgb(96 165 250);
+    --color-custom-500: rgb(59 130 246);
+    --color-custom-600: rgb(37 99 235);
+    --color-custom-700: rgb(29 78 216);
+    --color-custom-800: rgb(30 64 175);
+    --color-custom-900: rgb(30 58 138);
+    --color-custom-950: rgb(23 37 84);
 
     --font-sans: ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
@@ -193,68 +268,91 @@
 }
 
 @layer components {
+    /* ------------------------------------------------------------------
+     *  Các class dưịi đây được dùng ở ~530 vị trí trong các view.
+     *  Chúng được ÁNH XẠ sang đúng hệ màu của THEME GỐC
+     *  (custom-500 làm màu nhấn, slate/zink cho nền & viền) thay vì
+     *  hệ màu riêng của bản rewrite. Nhờ vậy toàn bộ view đồng bộ
+     *  giao diện với theme cũ mà không phải sửa tay từng chỗ.
+     * ------------------------------------------------------------------ */
     .btn-primary {
-        @apply btn bg-primary text-primary-foreground h-9 px-4 hover:opacity-90;
+        @apply btn h-9 px-4 text-white bg-custom-500 border border-custom-500
+               hover:bg-custom-600 hover:border-custom-600 hover:text-white
+               focus:ring focus:ring-custom-100 dark:ring-custom-400/20;
     }
 
     .btn-secondary {
-        @apply btn bg-secondary text-secondary-foreground h-9 px-4 hover:opacity-90;
+        @apply btn h-9 px-4 text-slate-600 bg-slate-100 border border-slate-200
+               hover:bg-slate-200 dark:bg-zink-600 dark:text-zink-100
+               dark:border-zink-500 dark:hover:bg-zink-500;
     }
 
     .btn-destructive {
-        @apply btn bg-destructive text-destructive-foreground h-9 px-4 hover:opacity-90;
+        @apply btn h-9 px-4 text-white bg-red-500 border border-red-500
+               hover:bg-red-600 hover:border-red-600 focus:ring focus:ring-red-100
+               dark:ring-red-400/20;
     }
 
     .btn-outline {
-        @apply btn border border-border bg-background h-9 px-4 hover:bg-accent;
+        @apply btn h-9 px-4 bg-transparent border text-custom-500 border-custom-500
+               hover:text-white hover:bg-custom-500
+               focus:ring focus:ring-custom-100 dark:ring-custom-400/20;
     }
 
     .btn-sm {
         @apply h-8 px-3 text-xs;
     }
 
-    .card {
-        @apply bg-card text-card-foreground border border-border rounded-lg shadow-sm;
-    }
+    /* KHÔNG định nghĩa .card / .card-body ở đây.
+       Hai class đó thuộc theme gốc Tailwick (tailwind2.css) và được dùng
+       xuyên suốt view. Nếu khai báo lại, thứ tự nạp sẽ khiến bản này ghi
+       đè lên theme và card mất đúng viền/đổ bóng/nền dark-mode của bản cũ. */
 
+    /* .card-header / .card-title không có trong theme gốc nên bọ sung,
+       dùng đúng thang màu slate/zink của theme để khớp hình. */
     .card-header {
-        @apply flex flex-col gap-1 border-b border-border px-5 py-4;
+        @apply flex flex-col gap-1 px-5 py-4 border-b border-slate-200 dark:border-zink-500;
     }
 
     .card-title {
         @apply text-base font-semibold leading-none;
     }
 
-    .card-body {
-        @apply px-5 py-4;
-    }
-
+    /* .input ánh xạ sang .form-input của theme gốc */
     .input {
-        @apply flex h-9 w-full rounded-md border border-input bg-background px-3 py-1
-               text-sm shadow-sm transition-colors
-               placeholder:text-muted-foreground
-               focus-visible:ring-2 focus-visible:ring-ring focus-visible:outline-none
-               disabled:cursor-not-allowed disabled:opacity-50;
+        @apply block w-full px-4 py-2 text-sm border rounded-md
+               border-slate-200 bg-white text-slate-700
+               placeholder:text-slate-400 transition-colors
+               focus:outline-none focus:border-custom-500
+               disabled:cursor-not-allowed disabled:bg-slate-100 disabled:opacity-70
+               dark:bg-zink-600/50 dark:border-zink-500 dark:text-zink-100
+               dark:placeholder:text-zink-200 dark:focus:border-custom-800
+               dark:disabled:bg-zink-600;
     }
 
     .label {
-        @apply text-sm font-medium leading-none;
+        @apply inline-block mb-2 text-base font-medium;
     }
 
+    /* Badge theo kiểu theme gốc: nền nhạt + chữ đậm cùng tông */
     .badge-success {
-        @apply badge bg-success text-success-foreground;
+        @apply badge text-green-500 bg-green-100 dark:bg-green-500/20;
     }
 
     .badge-warning {
-        @apply badge bg-warning text-warning-foreground;
+        @apply badge text-yellow-500 bg-yellow-100 dark:bg-yellow-500/20;
     }
 
     .badge-destructive {
-        @apply badge bg-destructive text-destructive-foreground;
+        @apply badge text-red-500 bg-red-100 dark:bg-red-500/20;
     }
 
     .badge-secondary {
-        @apply badge bg-secondary text-secondary-foreground;
+        @apply badge text-slate-500 bg-slate-100 dark:bg-zink-600 dark:text-zink-200;
+    }
+
+    .badge-primary {
+        @apply badge text-custom-500 bg-custom-100 dark:bg-custom-500/20;
     }
 
     .table-wrap {
@@ -266,25 +364,45 @@
     }
 
     .table thead th {
-        @apply h-10 px-3 text-left align-middle text-xs font-medium
-               text-muted-foreground whitespace-nowrap;
+        @apply h-10 px-3 text-left align-middle text-xs font-medium whitespace-nowrap
+               text-slate-500 dark:text-zink-200;
     }
 
     .table tbody tr {
-        @apply border-t border-border transition-colors;
+        @apply border-t transition-colors border-slate-200 dark:border-zink-500;
     }
 
     .table tbody td {
         @apply px-3 py-3 align-middle;
     }
 
-    .alert-error {
-        @apply alert border-destructive/30 bg-destructive/10 text-destructive;
+    /* ------------------------------------------------------------------
+     *  Alert theo kiểu theme gốc.
+     *
+     *  LƯU Ý: `alert-info` được dùng ở 8 vị trí trong view (layout,
+     *  trang nạp tiền, hướng dẫn...) nhưng TRƯỚC ĐÂY CHƯA HỀ được
+     *  định nghĩa — Tailwind không sinh CSS cho class không tồn tại nên
+     *  các thông báo đó hiển thị trần trụi, không khung/không màu.
+     *  Đây là lỗi thật, nay được bọ sung.
+     * ------------------------------------------------------------------ */
+    .alert-info {
+        @apply alert text-sky-500 bg-sky-50 border-sky-200
+               dark:bg-sky-400/20 dark:border-sky-500/50;
     }
 
     .alert-success {
-        @apply alert border-success/30 bg-success/10;
-        color: var(--success);
+        @apply alert text-green-500 bg-green-50 border-green-200
+               dark:bg-green-400/20 dark:border-green-500/50;
+    }
+
+    .alert-warning {
+        @apply alert text-yellow-500 bg-yellow-50 border-yellow-200
+               dark:bg-yellow-400/20 dark:border-yellow-500/50;
+    }
+
+    .alert-error {
+        @apply alert text-red-500 bg-red-50 border-red-200
+               dark:bg-red-400/20 dark:border-red-500/50;
     }
 }
 

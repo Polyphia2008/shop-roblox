@@ -157,6 +157,13 @@
         opacity: 1;
         transition: opacity 0.3s ease;
     }
+
+    /* Alpine `x-cloak`: giữ phần tử ẩn cho tới khi Alpine khởi tạo,
+       tránh "nháy" nội dung (ví dụ thông tin đăng nhập nick) trong
+       khoảnh khắc trước khi JS chạy. */
+    [x-cloak] {
+        display: none !important;
+    }
 }
 
 /* ==================================================================

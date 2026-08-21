@@ -50,7 +50,7 @@ class ProfileController extends Controller
     public function update(Request $request): RedirectResponse
     {
         $data = $request->validate([
-            'name'     => ['nullable', 'string', 'max:100'],
+            'username' => ['nullable', 'string', 'max:100'],
             'telegram' => ['nullable', 'string', 'max:32', 'regex:/^[0-9]+$/'],
         ], [
             'telegram.regex' => 'Telegram ID chỉ gồm chữ số.',

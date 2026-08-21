@@ -32,7 +32,7 @@
                 <div class="flex items-center justify-between gap-2">
                     <span class="text-muted-foreground">Tổng đã nạp</span>
                     <span class="font-medium">
-                        {{ number_format((int) $user->totalmoney, 0, ',', '.') }}đ
+                        {{ number_format((int) $user->total_money, 0, ',', '.') }}đ
                     </span>
                 </div>
                 <div class="flex items-center justify-between gap-2">
@@ -95,10 +95,10 @@
                 @method('PATCH')
 
                 <div>
-                    <label for="name" class="label mb-2 block">Tên hiển thị</label>
-                    <input id="name" name="name" type="text" maxlength="100"
-                           value="{{ old('name', $user->name) }}" class="input">
-                    @error('name')
+                    <label for="username" class="label mb-2 block">Tên hiển thị</label>
+                    <input id="username" name="username" type="text" maxlength="100"
+                           value="{{ old('username', $user->username) }}" class="input">
+                    @error('username')
                         <p class="mt-1 text-xs text-destructive">{{ $message }}</p>
                     @enderror
                 </div>

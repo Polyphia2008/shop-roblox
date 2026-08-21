@@ -52,11 +52,13 @@ class UserController extends Controller
                 $safe = addcslashes($keyword, '%_\\');
                 $q->where(function ($sub) use ($safe) {
                     $sub->where('email', 'like', "%{$safe}%")
-                        ->orWhere('name', 'like', "%{$safe}%")
+                        ->orWhere('username', 'like', "%{$safe}%")
                         ->orWhere('telegram', 'like', "%{$safe}%");
                 });
             })
-            ->when($request->query('banned') !== null, fn ($q) => $q->where('banned', $request->query('banned') === '1' ? '1' : '0'))
+            /* Lọc theo trạng thái khoá: giá trị từ URL được ép về bool,
+               không đưa thẳng vào truy vấn. */
+            ->when($request->query('banned') !== null, fn ($q) => $q->where('banned', $request->query('banned') === '1'))
             ->orderBy($column, $direction)
             ->paginate(30)
             ->withQueryString();
@@ -75,10 +77,10 @@ class UserController extends Controller
     public function update(Request $request, User $user): RedirectResponse
     {
         $data = $request->validate([
-            'name'      => ['nullable', 'string', 'max:100'],
+            'username'  => ['nullable', 'string', 'max:100'],
             'telegram'  => ['nullable', 'string', 'max:32', 'regex:/^[0-9]*$/'],
             'level'     => ['required', 'integer', 'in:0,1'],
-            'banned'    => ['required', 'in:0,1'],
+            'banned'    => ['required', 'boolean'],
             'adjust'    => ['nullable', 'integer', 'min:-1000000000', 'max:1000000000'],
             'reason'    => ['nullable', 'string', 'max:255'],
             'password'  => ['nullable', 'confirmed', Password::min(8)->mixedCase()->numbers()],
@@ -86,13 +88,13 @@ class UserController extends Controller
 
         /* Không cho admin tự hạ quyền / tự ban -> tránh khoá chết hệ thống */
         if ($user->is($request->user())) {
-            if ((int) $data['level'] !== 1 || $data['banned'] === '1') {
+            if ((int) $data['level'] !== 1 || (bool) $data['banned']) {
                 return back()->with('error', 'Bạn không thể tự hạ quyền hoặc tự khoá tài khoản của mình.');
             }
         }
 
         $user->fill([
-            'name'     => $data['name'] ?? $user->name,
+            'username' => $data['username'] ?? $user->username,
             'telegram' => $data['telegram'] ?? $user->telegram,
         ]);
 
@@ -100,7 +102,7 @@ class UserController extends Controller
            Đây là cách cố tình bắt admin viết rõ ràng, tránh mass assignment. */
         $user->forceFill([
             'level'  => (int) $data['level'],
-            'banned' => (string) $data['banned'],
+            'banned' => (bool) $data['banned'],
         ]);
 
         if (! empty($data['password'])) {

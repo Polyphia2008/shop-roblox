@@ -43,7 +43,7 @@ class DashboardController extends Controller
             'stats' => [
                 'users'        => User::query()->count(),
                 'users_today'  => User::query()->whereDate('created_at', today())->count(),
-                'banned'       => User::query()->where('banned', '1')->count(),
+                'banned'       => User::query()->where('banned', true)->count(),
                 'accounts'     => AccountRb::query()->where('status', AccountRb::STATUS_ON_SALE)->count(),
                 'nicks'        => ProductNick::query()->where('status', 'live')->count(),
                 'orders_today' => Order::query()->whereDate('created_at', today())->count(),

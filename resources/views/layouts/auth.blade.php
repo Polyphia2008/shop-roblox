@@ -61,13 +61,39 @@
             </div>
         </div>
 
-        {{-- Nửa phải: chỉ trang trí, ẩn trên mobile --}}
+        {{--
+            Nửa phải: chỉ trang trí, ẩn trên mobile.
+
+            SỬA LỖI THẬT (bug #4) — xung đột gradient Tailwind 3 vs 4
+            --------------------------------------------------------
+            Trước đây dùng `bg-gradient-to-br from-custom-500 to-purple-500`.
+            Cả tailwind2.css (theme, TW3) và bundle của ta (TW4) đều định nghĩa
+            các class này, nhưng KHÁC CÚ PHÁP:
+                TW3: --tw-gradient-from: #3b82f6 var(--tw-gradient-from-position)
+                TW4: @property --tw-gradient-from { syntax:"<color>"; initial-value:#0000 }
+            Bundle TW4 nạp sau nên thắng cascade, nhưng @property của nó ép kiểu
+            `<color>`; giá trị "màu + vị trí" kiểu TW3 KHÔNG hợp kiểu -> bị loại
+            -> quay về #0000. Đo trên trình duyệt:
+                backgroundImage = linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0))
+            Gradient trong suốt hoàn toàn -> chữ trắng trên nền sáng, KHÔNG ĐỌC ĐƯỢC.
+
+            Cách sửa: dùng class CSS thuần `.auth-hero` (định nghĩa trong
+            resources/css/app.css) viết thẳng linear-gradient với ĐÚNG 2 màu của
+            theme (custom-500 #3b82f6 -> purple-500 #a855f7), không phụ thuộc
+            biến --tw-gradient-* nên miễn nhiễm với xung đột TW3/TW4.
+        --}}
         <div class="hidden lg:col-span-6 lg:block">
-            <div class="relative h-full px-10 py-12 rounded-e-md bg-gradient-to-br from-custom-500 to-purple-500">
+            <div class="relative h-full px-10 py-12 rounded-e-md auth-hero">
                 <div class="absolute inset-0 bg-cover opacity-10 bg-auth-pattern"></div>
+                {{--
+                    Tiêu đề cột trang trí do TỪNG TRANG tự đặt qua @section.
+                    Trước đây layout ghi cứng "Chào mừng trở lại!" nên:
+                      - trang đăng nhập bị LẶP tiêu đề (login.blade.php cũng có),
+                      - trang đăng ký hiện SAI ngữ cảnh ("trở lại" cho người mới).
+                --}}
                 <div class="relative flex flex-col h-full">
-                    <h3 class="text-2xl font-semibold text-white">Chào mừng trở lại!</h3>
-                    <p class="mt-3 text-white/70">Đăng nhập để tiếp tục mua nick game và quản lý đơn hàng của bạn.</p>
+                    <h3 class="text-2xl font-semibold text-white">@yield('hero_title', 'Chào mừng!')</h3>
+                    <p class="mt-3 text-white/70">@yield('hero_text', 'Mua nick game và quản lý đơn hàng của bạn.')</p>
                     <div class="mt-auto text-sm text-white/70">
                         &copy; {{ date('Y') }} {{ $siteTitle }}
                     </div>

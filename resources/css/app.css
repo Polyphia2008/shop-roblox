@@ -404,6 +404,29 @@
         @apply alert text-red-500 bg-red-50 border-red-200
                dark:bg-red-400/20 dark:border-red-500/50;
     }
+
+    /* ------------------------------------------------------------------
+     *  .auth-hero — nền gradient cột phải trang đăng nhập / đăng ký
+     *
+     *  SỬA LỖI THẬT (bug #4): xung đột gradient Tailwind 3 vs Tailwind 4.
+     *  Không dùng `bg-gradient-to-br from-custom-500 to-purple-500` được, vì
+     *  tailwind2.css (theme, TW3) và bundle này (TW4) cùng định nghĩa các
+     *  class đó nhưng khác cú pháp biến:
+     *      TW3: --tw-gradient-from: #3b82f6 var(--tw-gradient-from-position)
+     *      TW4: @property --tw-gradient-from { syntax:"<color>"; initial-value:#0000 }
+     *  @property của TW4 ép kiểu `<color>`, giá trị "màu + vị trí" của TW3
+     *  không hợp kiểu nên bị loại về #0000. Kết quả đo trên trình duyệt:
+     *      background-image: linear-gradient(rgba(0,0,0,0), rgba(0,0,0,0))
+     *  -> gradient trong suốt, chữ trắng trên nền sáng, không đọc được.
+     *
+     *  Viết linear-gradient thuần với ĐÚNG 2 màu của theme để giữ nguyên
+     *  giao diện gốc, đồng thời miễn nhiễm xung đột phiên bản.
+     *      custom-500 = #3b82f6   (rgb 59 130 246)
+     *      purple-500 = #a855f7   (rgb 168 85 247)
+     * ------------------------------------------------------------------ */
+    .auth-hero {
+        background-image: linear-gradient(to bottom right, #3b82f6, #a855f7);
+    }
 }
 
 /* ==================================================================

@@ -1,8 +1,16 @@
 @extends('layouts.auth')
 @section('title', 'Đăng nhập')
 
+{{-- Tiêu đề cột trang trí bên phải (xem chú thích trong layouts/auth.blade.php) --}}
+@section('hero_title', 'Chào mừng trở lại!')
+@section('hero_text', 'Đăng nhập để tiếp tục mua nick game và quản lý đơn hàng của bạn.')
+
 @section('content')
-    <h4 class="mb-1 text-custom-500 dark:text-custom-500">Chào mừng trở lại!</h4>
+    {{--
+        Tiêu đề cột form. KHÔNG lặp lại "Chào mừng trở lại!" của cột trang trí
+        bên phải (cùng nằm trong một khung, đọc lên bị trùng 2 lần).
+    --}}
+    <h4 class="mb-1 text-custom-500 dark:text-custom-500">Đăng nhập</h4>
     <p class="mb-6 text-slate-500 dark:text-zink-200">Nhập email và mật khẩu để tiếp tục.</p>
 
     <x-flash />

@@ -1,6 +1,10 @@
 @extends('layouts.auth')
 @section('title', 'Đăng ký')
 
+{{-- Tiêu đề cột trang trí bên phải: đúng ngữ cảnh người dùng MỚI --}}
+@section('hero_title', 'Bắt đầu ngay!')
+@section('hero_text', 'Tạo tài khoản để mua nick game và theo dõi đơn hàng của bạn.')
+
 @php
     // Gom class ô nhập của theme vào một biến cho gọn, giữ nguyên từng class.
     $inputCls = 'w-full py-2.5 px-4 text-15 rounded border-slate-200 dark:border-zink-500'

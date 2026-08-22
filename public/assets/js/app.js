@@ -376,6 +376,9 @@ function removeActiveClass(selector) {
 
 function lightDarkMode() {
     var lightDarkBtn = document.getElementById('light-dark-mode');
+    // bug #3 (tiếp): trang không có topbar (ví dụ trang đăng nhập) thì
+    // #light-dark-mode không tồn tại -> null.addEventListener -> TypeError.
+    if (!lightDarkBtn) return;
     lightDarkBtn.addEventListener('click', () => {
         if (sessionStorage.getItem("data-mode") === "light") {
             // set attributes
@@ -496,7 +499,16 @@ function layoutSetting() {
         });
     });
 
+    /*
+     * bug #3 (tiếp): #customDefaultSwitch là công tắc CỦA BẢNG CUSTOMIZER.
+     * Trang thật không nhúng bảng đó -> null.addEventListener -> TypeError:
+     *   Cannot read properties of null (reading 'addEventListener')
+     * Lỗi nổ trong layoutSetting(), tức lệnh THỨ HAI của init(), nên các bước
+     * sau (windowLoadContent, resetLayout, updateHorizontalMenus, lightDarkMode,
+     * initFilters, initMenuItemScroll) vẫn không chạy.
+     */
     const customDefaultSwitch = document.getElementById('customDefaultSwitch');
+    if (!customDefaultSwitch) return;       // không có bảng customizer -> bỏ qua
     customDefaultSwitch.addEventListener('change', function (e) {
         if (document.documentElement.getAttribute("data-layout") == "vertical") {
             if (document.getElementById('customDefaultSwitch').checked) {

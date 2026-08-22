@@ -112,7 +112,17 @@ class ProxyHeaderTest extends TestCase
         $target = (string) $response->headers->get('Location');
 
         $this->assertStringStartsWith('https://', $target);
-        $this->assertStringNotContainsString(':80', $target);
+
+        /*
+         * So sánh CỔNG THẬT thay vì tìm chuỗi ':80'.
+         *
+         * Trước đây phép thử dùng assertStringNotContainsString(':80', ...).
+         * Đó là dương tính giả: khi APP_URL là http://localhost:8000, URL sinh
+         * ra là `https://localhost:8000/...` và chuỗi ':80' KHỚP TIỀN TỐ của
+         * ':8000' -> phép thử báo đỏ dù ứng dụng làm đúng (đã bỏ cổng 80).
+         * Phân tích cổng bằng parse_url mới kiểm được đúng điều cần kiểm.
+         */
+        $this->assertNotSame(80, parse_url($target, PHP_URL_PORT));
     }
 
     /* ================================================================

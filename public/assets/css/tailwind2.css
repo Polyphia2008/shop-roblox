@@ -1,7 +1,11 @@
-@import"https://fonts.googleapis.com/css2?family=Public+Sans:wght@200;300;400;500;600;700&amp;display=swap";@font-face {
+/* Theme gốc Tailwick (tailwind2.css) - GIỮ NGUYÊN từ source cũ.
+   Chỉ 2 thay đổi bắt buộc để chạy dưới CSP nghiêm ngặt (script-src/style-src 'self'):
+   1. Bỏ @import Google Fonts -> font Public Sans self-host tại css/public-sans.css
+   2. @font-face remixicon chỉ trỏ woff2 (source gốc thiếu eot/woff/ttf/svg -> 404)
+   Không đổi bất kỳ class/selector nào; giao diện giữ nguyên 100%. */
+@font-face {
     font-family: remixicon;
-    src: url(remixicona57d.eot?t=1702216974873);
-    src: url(remixicona57d.eot?t=1702216974873#iefix) format("embedded-opentype"),url(remixicona57d.woff2?t=1702216974873) format("woff2"),url(remixicona57d.woff?t=1702216974873) format("woff"),url(remixicona57d.ttf?t=1702216974873) format("truetype"),url(../images/remixicona57d.svg?t=1702216974873#remixicon) format("svg");
+    src: url(remixicona57d.woff2) format("woff2");
     font-display: swap
 }
 

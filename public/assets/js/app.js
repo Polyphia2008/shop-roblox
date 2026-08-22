@@ -351,8 +351,14 @@ function setDefaultAttribute() {
 
 }
 /*** Set value updateRadio id ***/
+/*
+ * Cùng lỗi với updateActiveBtn (bug #3): các radio "layout-one", "layoutSkitOne"...
+ * chỉ tồn tại trong bảng customizer tùy chọn. Thiếu bảng -> null.checked -> TypeError.
+ */
 function updateRadio(radioId) {
-    document.getElementById(radioId).checked = true;
+    const radio = document.getElementById(radioId);
+    if (!radio) return;
+    radio.checked = true;
 }
 /*** Set value Attribute ***/
 function setAttrItemAndTag(attr, val) {
@@ -370,6 +376,9 @@ function removeActiveClass(selector) {
 
 function lightDarkMode() {
     var lightDarkBtn = document.getElementById('light-dark-mode');
+    // bug #3 (tiếp): trang không có topbar (ví dụ trang đăng nhập) thì
+    // #light-dark-mode không tồn tại -> null.addEventListener -> TypeError.
+    if (!lightDarkBtn) return;
     lightDarkBtn.addEventListener('click', () => {
         if (sessionStorage.getItem("data-mode") === "light") {
             // set attributes
@@ -490,7 +499,16 @@ function layoutSetting() {
         });
     });
 
+    /*
+     * bug #3 (tiếp): #customDefaultSwitch là công tắc CỦA BẢNG CUSTOMIZER.
+     * Trang thật không nhúng bảng đó -> null.addEventListener -> TypeError:
+     *   Cannot read properties of null (reading 'addEventListener')
+     * Lỗi nổ trong layoutSetting(), tức lệnh THỨ HAI của init(), nên các bước
+     * sau (windowLoadContent, resetLayout, updateHorizontalMenus, lightDarkMode,
+     * initFilters, initMenuItemScroll) vẫn không chạy.
+     */
     const customDefaultSwitch = document.getElementById('customDefaultSwitch');
+    if (!customDefaultSwitch) return;       // không có bảng customizer -> bỏ qua
     customDefaultSwitch.addEventListener('change', function (e) {
         if (document.documentElement.getAttribute("data-layout") == "vertical") {
             if (document.getElementById('customDefaultSwitch').checked) {
@@ -510,13 +528,35 @@ function layoutSetting() {
     });
 }
 // Update Active
+/*
+ * SỬA LỖI THẬT CỦA THEME GỐC (bug #3)
+ * -----------------------------------
+ * Bảng "customizer" (#customizerButton) là TÙY CHỌN — chính tác giả theme đã
+ * chứng minh điều đó ở hàm hideShowLayoutOptions(), nơi mọi truy cập đều được
+ * bọc `if (document.getElementById("customizerButton"))`.
+ * Nhưng ở ĐÂY thì họ QUÊN kiểm tra:
+ *      const elemName = document.getElementById(btnId).getAttribute("name");
+ * Trang nào không nhúng bảng customizer -> getElementById trả null ->
+ *      TypeError: Cannot read properties of null (reading 'getAttribute')
+ * Lỗi này nổ ngay LỆNH ĐẦU TIÊN của init() (init -> setDefaultAttribute ->
+ * layoutSwitch -> updateActiveBtn("dataModeOne")), nên TOÀN BỘ phần còn lại
+ * của init() KHÔNG BAO GIỜ CHẠY: nút hamburger, nút sáng/tối, menu active,
+ * bộ lọc sản phẩm... đều mất tác dụng. Source cũ cũng mang đúng lỗi này.
+ *
+ * Cách sửa: thoát sớm khi không có nút — cùng tinh thần với
+ * hideShowLayoutOptions(). Khi CÓ bảng customizer, hành vi giữ nguyên 100%.
+ * Dòng `allElem.forEach` cũng được bảo vệ vì dòng trên đã dùng `?.` nên
+ * allElem có thể là undefined.
+ */
 function updateActiveBtn(btnId) {
-    const elemName = document.getElementById(btnId).getAttribute("name");
+    const btn = document.getElementById(btnId);
+    if (!btn) return;                       // không có bảng customizer -> bỏ qua
+    const elemName = btn.getAttribute("name");
     const allElem = document.querySelector("#customizerButton")?.querySelectorAll('button[name="' + elemName + '"]');
-    allElem.forEach(function (elem) {
+    allElem?.forEach(function (elem) {
         elem.classList.remove('active')
     });
-    document.getElementById(btnId).classList.add("active");
+    btn.classList.add("active");
 }
 
 //set full layout
